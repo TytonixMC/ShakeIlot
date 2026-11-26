@@ -3,72 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#071311">
-<title>SHAKE ILOT 1.0 BETA</title>
+<title>SHAKE ILOT 1.5 BETA</title>
 <link rel="stylesheet" href="style.css">
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#000000">
 </head>
 <body>
-<header id="mainHeader">
-<h1>🐍 SHAKE ILOT</h1>
-<div class="small">VERSION 1.0 BETA</div>
-</header>
-
+<header id="mainHeader"><h1>🐍 SHAKE ILOT</h1><div class="small">VERSION 1.5 BETA — BATTLE UPDATE</div></header>
+<section id="loadingScreen" class="panel">
+<div class="loader-logo">🐍</div><h1 class="loader-title">SHAKE ILOT</h1><p class="loader-subtitle">ЗАГРУЗКА ИГРЫ</p>
+<div class="loader-track"><div id="loadingBar" class="loader-fill"></div></div><p id="loadingPercent" class="loader-percent">0%</p>
+<div class="loader-dots"><span></span><span></span><span></span></div><p class="small">Подготавливаем змейку и арену...</p>
+</section>
 <section id="loginScreen" class="panel hidden">
-<h1>🐍 SHAKE ILOT</h1>
-<div class="small">VERSION 1.0 BETA</div>
-<h2>АККАУНТ ИГРОКА</h2>
-<p class="small">Войди в аккаунт или создай новый</p>
-<input id="username" maxlength="18" placeholder="Имя игрока" autocomplete="username">
-<input id="password" type="password" placeholder="Пароль" autocomplete="current-password">
-<button onclick="login()">🔐 ВОЙТИ В АККАУНТ</button>
-<button onclick="register()">✨ СОЗДАТЬ АККАУНТ</button>
-<p id="authMessage" class="small"></p>
+<h1>🐍 SHAKE ILOT</h1><div class="small">VERSION 1.1 BETA</div><h2>АККАУНТ ИГРОКА</h2><p class="small">Войди в аккаунт или создай новый</p>
+<input id="username" maxlength="18" placeholder="Имя игрока" autocomplete="username"><input id="password" type="password" placeholder="Пароль" autocomplete="current-password">
+<button onclick="login()">🔐 ВОЙТИ В АККАУНТ</button><button onclick="register()">✨ СОЗДАТЬ АККАУНТ</button><p id="authMessage" class="small"></p>
 </section>
-
 <section id="menuScreen" class="panel hidden">
-<h2>ГЛАВНОЕ МЕНЮ</h2>
-<p id="welcome"></p>
-<div class="stats">
- <div class="stat">⭐ XP: <span id="menuXP">0</span></div>
- <div class="stat">🪙 Монеты: <span id="menuCoins">0</span></div>
-</div>
-<p><button onclick="startGame()">🎮 ИГРАТЬ</button></p>
-<p><button onclick="showShop()">🛒 МАГАЗИН СКИНОВ</button></p>
-<p><button onclick="claimGold()">🎁 БОНУС</button></p>
-<p><button onclick="toggleMusic()" id="musicButton">🎵 ВЫКЛЮЧИТЬ МУЗЫКУ</button></p>
-<p><button onclick="logout()">🚪 ВЫЙТИ ИЗ АККАУНТА</button></p>
+<h2>ГЛАВНОЕ МЕНЮ</h2><p id="welcome"></p><div class="stats"><div class="stat">⭐ XP: <span id="menuXP">0</span></div><div class="stat">🪙 Монеты: <span id="menuCoins">0</span></div></div>
+<p><button onclick="startGame()">🎮 ИГРАТЬ</button></p><p><button onclick="showShop()">🛒 МАГАЗИН СКИНОВ</button></p><p><button onclick="claimGold()">🎁 БОНУС</button></p>
+<p><button onclick="toggleMusic()" id="musicButton">🎵 ВЫКЛЮЧИТЬ МУЗЫКУ</button></p><p><button onclick="logout()">🚪 ВЫЙТИ ИЗ АККАУНТА</button></p>
 </section>
-
-<section id="shopScreen" class="panel hidden">
-<h2>🛒 МАГАЗИН СКИНОВ</h2>
-<p>Монеты: <span id="shopCoins">0</span></p>
-<div id="skinsList"></div>
-<button onclick="showOnly('menuScreen')">НАЗАД</button>
-</section>
-
-<section id="gameScreen" class="hidden">
- <div id="shakeTitle">SHAKE ILOT 1.0 BETA</div>
- <div class="canvasWrap"><canvas id="gameCanvas"></canvas></div>
- <div id="gameStats">
-  <div class="stat">🍎 Яблоки: <span id="score">0</span></div>
-  <div class="stat">🌊 Волна: <span id="wave">1</span></div>
-  <div class="stat">⭐ XP: <span id="gameXP">0</span></div>
- </div>
- <p id="goalText" class="small"></p>
- <button onclick="pauseGame()">⏸️ ПАУЗА</button>
- <button onclick="backToMenu()">В МЕНЮ</button>
-</section>
-
-<section id="gameOverScreen" class="panel hidden">
-<h2 id="endTitle">ИГРА ОКОНЧЕНА</h2>
-<p id="endText"></p>
-<button onclick="startGame()">ИГРАТЬ СНОВА</button>
-<button onclick="backToMenu()">В МЕНЮ</button>
-</section>
-
-<footer id="footer">SHAKE ILOT 1.0 BETA © 2026</footer>
+<section id="shopScreen" class="panel hidden"><h2>🛒 МАГАЗИН СКИНОВ</h2><p>Монеты: <span id="shopCoins">0</span></p><div id="skinsList"></div><button onclick="showOnly('menuScreen')">НАЗАД</button></section>
+<section id="gameScreen" class="hidden"><div id="shakeTitle">SHAKE ILOT 1.5 BETA</div><div class="canvasWrap"><canvas id="gameCanvas"></canvas></div>
+<div id="gameStats"><div class="stat">🍎 Яблоки: <span id="score">0</span></div><div class="stat">🌊 Волна: <span id="wave">1</span></div><div class="stat">⭐ XP: <span id="gameXP">0</span></div><div class="stat">👾 Враги: <span id="enemyCount">0</span></div></div>
+<p id="goalText" class="small"></p><button onclick="pauseGame()">⏸️ ПАУЗА</button><button onclick="backToMenu()">В МЕНЮ</button></section>
+<section id="gameOverScreen" class="panel hidden"><h2 id="endTitle">ИГРА ОКОНЧЕНА</h2><p id="endText"></p><button onclick="startGame()">ИГРАТЬ СНОВА</button><button onclick="backToMenu()">В МЕНЮ</button></section>
+<footer id="footer">SHAKE ILOT 1.5 BETA © 2026</footer>
 <script src="script.js"></script>
 </body>
 </html>
