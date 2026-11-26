@@ -1,0 +1,112 @@
+(() => {
+"use strict";
+
+/* SHAKE ILOT — самостоятельная браузерная игра.
+   Этот файл сам создаёт интерфейс и стили. Подключи его через <script src="game.js"></script>. */
+
+const style = document.createElement("style");
+style.textContent = `
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#0c101a;color:white;font-family:Arial,sans-serif;text-align:center}
+header{min-height:150px;padding:22px;background:linear-gradient(135deg,#171b38,#42316d,#171b38);border-bottom:2px solid #8065ff;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.logo{font-size:clamp(25px,6vw,34px);font-weight:bold;letter-spacing:3px}
+.subtitle{margin-top:8px;color:#ddd}.version{margin-top:9px;padding:5px 12px;border:1px solid #a58dff;border-radius:20px;color:#c5b6ff;font-size:12px;letter-spacing:2px}
+.container{width:96%;max-width:620px;margin:auto}.panel{background:#1b2232;padding:20px;margin:18px 0;border-radius:15px}
+h2{color:#a58dff}button{background:#8065ff;color:white;border:0;padding:13px 20px;border-radius:11px;font-size:15px;font-weight:bold;cursor:pointer;margin:6px}
+button:disabled{background:#50586a}input{display:block;width:100%;padding:14px;margin:12px 0;border-radius:9px;border:1px solid #65718a;background:#111827;color:white;font-size:16px}
+.play{width:90%;max-width:300px;font-size:20px;background:linear-gradient(90deg,#7354ee,#a17bff)}.shop-button{background:#d18b25;color:#211800}
+.back-button{background:#46536d}.music-button{background:#267c85}.stats{display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px}
+.stat{font-size:12px;color:#c3cce0}.stat b{display:block;margin-top:5px;font-size:16px;color:white}
+.progress{height:11px;background:#30394b;border-radius:20px;overflow:hidden}#xpBar,#menuXPBar{height:100%;width:0%;background:linear-gradient(90deg,#a56b36,#ffd34f)}
+#gameScreen,#gameOver,#shopScreen,#menuScreen,#authScreen{display:none}#message,#authMessage,#shopMessage{color:#ffd45c;min-height:25px}
+.game-frame{background:#1b2232;border:4px solid #78869d;border-radius:12px;margin:8px auto;width:calc(100vw - 8px);max-width:900px;position:relative;overflow:hidden}
+#canvas{display:block;width:100%;aspect-ratio:1;background:#152330;touch-action:none}
+.game-stats{background:#252e42;padding:8px;margin-top:6px;border-radius:10px}.wave-info{background:#30394b;border-radius:9px;padding:8px;margin-bottom:8px}
+#wave{font-size:17px;font-weight:bold;color:#ffd45c}#waveGoal{color:#aebbd0;font-size:11px;margin-top:4px}
+.reward,.skin-card{background:#252e42;padding:13px;border-radius:10px;margin:9px 0;text-align:left}.skin-card{text-align:center;border:1px solid #39465f}
+.skin-preview{font-size:38px}.skin-name{font-size:18px;font-weight:bold;margin:8px}.skin-price{color:#ffd45c}.skin-status{color:#9da9c0;font-size:13px}
+.account-line{font-size:13px;color:#b8c5dc;margin:10px}footer{padding:25px;color:#68748a}
+body.playing{overflow:hidden;height:100dvh}body.playing header,body.playing footer,body.playing #message{display:none!important}
+body.playing .container{width:100%;max-width:none;height:100dvh;margin:0;padding:0}
+body.playing #gameScreen{display:flex!important;position:fixed;inset:0;width:100vw;height:100dvh;margin:0;padding:0}
+body.playing .game-frame{position:relative;width:100vw;height:100dvh;max-width:none;margin:0;padding:0;border:4px solid #78869d;border-radius:12px;overflow:hidden;background:#152330}
+body.playing #canvas{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}
+body.playing .game-stats{position:absolute;z-index:2;left:0;right:0;bottom:0;margin:0;background:rgba(25,34,50,.92);pointer-events:none}
+@media(orientation:landscape){body.playing .game-stats{left:auto;right:0;top:0;bottom:0;width:110px;display:flex;flex-direction:column;justify-content:center}body.playing .stats{flex-direction:column}}
+`;
+document.head.appendChild(style);
+
+document.body.innerHTML = `
+<header><div class="logo">🐍 SHAKE ILOT</div><div class="subtitle">Твоя змейка. Твои рекорды. Твоя игра.</div><div class="version">VERSION 1.0 BETA</div></header>
+<div class="container">
+<section id="authScreen"><div class="panel"><h1>🐍 SHAKE ILOT</h1><div class="version">1.0 BETA</div><h2 id="authTitle">Регистрация</h2><p>Создай аккаунт, чтобы сохранять прогресс.</p>
+<input id="username" maxlength="18" placeholder="Имя аккаунта" autocomplete="username"><input id="password" type="password" maxlength="40" placeholder="Пароль" autocomplete="current-password">
+<button class="play" id="authButton">ЗАРЕГИСТРИРОВАТЬСЯ</button><p id="authMessage"></p><button class="back-button" id="switchAuth">Уже есть аккаунт? Войти</button></div></section>
+<section id="menuScreen"><div class="panel"><h1>SHAKE ILOT</h1><div class="version">1.0 BETA</div><div class="account-line">Аккаунт: <b id="activeUsername"></b></div>
+<button class="play" id="startButton">▶ НАЧАТЬ ИГРУ</button><br><button class="shop-button" id="shopButton">🛒 МАГАЗИН СКИНОВ</button><br>
+<button class="music-button" id="musicButton">🎵 ВКЛЮЧИТЬ МУЗЫКУ</button><br><button class="back-button" id="logoutButton">🚪 ВЫЙТИ ИЗ АККАУНТА</button><p class="skin-status" id="musicInfo">Музыка выключена</p></div>
+<div class="panel"><h2>🏆 ТВОЙ ПРОФИЛЬ</h2><div class="stats"><div class="stat">⭐ Опыт<b id="menuXP">0/100</b></div><div class="stat">🏅 Ранг<b id="menuRank">Бронза</b></div><div class="stat">🪙 Монеты<b id="menuCoins">0</b></div></div><br><div class="progress"><div id="menuXPBar"></div></div></div>
+<div class="panel"><h2>🌊 ВОЛНЫ</h2><div class="reward">🌊 Волна 1 — 20 яблок</div><div class="reward">🌊 Волна 2 — 30 яблок</div><div class="reward">🌊 Волна 3 — 40 яблок</div><div class="reward">🔥 Волна 4 — 70 яблок и враги</div></div>
+<div class="panel"><h2>🎮 КАК ИГРАТЬ?</h2><p>🍎 Собирай яблоки.</p><p>🧱 Избегай препятствий.</p><p>🐍 Не сталкивайся с собой.</p><p>👆 Управляй свайпами или стрелками.</p></div></section>
+<section id="shopScreen"><div class="panel"><h1>🛒 МАГАЗИН СКИНОВ</h1><p>🪙 Баланс: <b id="shopCoins">0</b></p><div id="skinList"></div><p id="shopMessage"></p><button class="back-button" id="closeShop">⬅ НАЗАД</button></div></section>
+<section id="gameScreen"><div class="game-frame"><canvas id="canvas" width="560" height="560"></canvas><div class="game-stats"><div class="wave-info"><div id="wave">🌊 ВОЛНА 1</div><div id="waveGoal">До следующей волны: 20 яблок</div></div>
+<div class="stats"><div class="stat">🍎 Яблоки<b id="score">0/70</b></div><div class="stat">⭐ XP<b id="xp">0/100</b></div><div class="stat">🏆 Ранг<b id="rank">Бронза</b></div><div class="stat">🪙 Монеты<b id="coins">0</b></div></div><br><div class="progress"><div id="xpBar"></div></div></div></div><p id="message">Собирай яблоки!</p><button class="back-button" id="quitGame">В МЕНЮ</button></section>
+<section id="gameOver" class="panel"><h1 id="endTitle">ИГРА ОКОНЧЕНА</h1><p id="endText"></p><p id="endReward"></p><p id="endCoins"></p><button id="toMenu">🏠 МЕНЮ</button><button id="restart">🔄 ЗАНОВО</button></section>
+</div><footer>SHAKE ILOT 1.0 BETA © 2026</footer>`;
+
+const $ = id => document.getElementById(id);
+const ACCOUNTS_KEY="snakeNG_accounts_v1", SESSION_KEY="snakeNG_session_v1", MUSIC_KEY="snakeNG_music_v1";
+let currentUser=null, authMode="register", xp=0, coins=0, ownedSkins=["default"], equippedSkin="default", goldBonusClaimed=false;
+let audioContext=null, musicEnabled=localStorage.getItem(MUSIC_KEY)==="true", musicTimer=null, musicStep=0;
+const melody=[261.63,329.63,392,329.63,293.66,349.23,440,349.23,261.63,329.63,392,493.88,440,392,349.23,329.63];
+function updateMusicButton(){ $("musicButton").textContent=musicEnabled?"🔇 ВЫКЛЮЧИТЬ МУЗЫКУ":"🎵 ВКЛЮЧИТЬ МУЗЫКУ"; $("musicInfo").textContent=musicEnabled?"🎶 Музыка включена":"Музыка выключена"; }
+function playNote(f){if(!audioContext||audioContext.state!=="running")return;const now=audioContext.currentTime,o=audioContext.createOscillator(),g=audioContext.createGain();o.type="sine";o.frequency.setValueAtTime(f,now);g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(.035,now+.12);g.gain.exponentialRampToValueAtTime(.001,now+1.15);o.connect(g);g.connect(audioContext.destination);o.start(now);o.stop(now+1.2);}
+function startMusic(){if(!musicEnabled)return;if(!audioContext){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;audioContext=new C();}if(audioContext.state!=="running")audioContext.resume().catch(()=>{});if(musicTimer)return;musicTimer=setInterval(()=>{if(!musicEnabled||audioContext.state!=="running")return;playNote(melody[musicStep%melody.length]);if(musicStep%4===0)playNote(melody[(musicStep+4)%melody.length]/2);musicStep++;},550);}
+function toggleMusic(){musicEnabled=!musicEnabled;localStorage.setItem(MUSIC_KEY,String(musicEnabled));if(musicEnabled)startMusic();else{clearInterval(musicTimer);musicTimer=null;}updateMusicButton();}
+document.addEventListener("pointerdown",()=>{if(musicEnabled)startMusic();},{passive:true});
+function getAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)||"{}");}catch{return {};}}
+function saveAccounts(a){localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(a));}
+function showOnly(id){["authScreen","menuScreen","shopScreen","gameScreen","gameOver"].forEach(x=>$(x).style.display=x===id?"block":"none");}
+function saveProgress(){if(!currentUser)return;const a=getAccounts();if(!a[currentUser])return;Object.assign(a[currentUser],{xp,coins,ownedSkins,equippedSkin,goldBonusClaimed});saveAccounts(a);}
+function updateStats(){const rank=xp>=100?"🥇 Золото":"🥉 Бронза";$("xp").textContent=xp+"/100";$("rank").textContent=rank;$("xpBar").style.width=xp+"%";$("menuXP").textContent=xp+"/100";$("menuRank").textContent=rank;$("menuXPBar").style.width=xp+"%";$("coins").textContent=coins;$("menuCoins").textContent=coins;$("shopCoins").textContent=coins;saveProgress();}
+function loginUser(key){const a=getAccounts();if(!a[key])return;currentUser=key;localStorage.setItem(SESSION_KEY,key);const d=a[key];xp=Number(d.xp)||0;coins=Number(d.coins)||0;ownedSkins=Array.isArray(d.ownedSkins)?d.ownedSkins:["default"];if(!ownedSkins.includes("default"))ownedSkins.push("default");equippedSkin=d.equippedSkin||"default";if(!ownedSkins.includes(equippedSkin))equippedSkin="default";goldBonusClaimed=!!d.goldBonusClaimed;$("activeUsername").textContent=d.username;document.body.classList.remove("playing");showOnly("menuScreen");updateStats();renderShop();updateMusicButton();}
+function switchAuthMode(){authMode=authMode==="register"?"login":"register";$("authTitle").textContent=authMode==="register"?"Регистрация":"Вход";$("authButton").textContent=authMode==="register"?"ЗАРЕГИСТРИРОВАТЬСЯ":"ВОЙТИ";$("switchAuth").textContent=authMode==="register"?"Уже есть аккаунт? Войти":"Нет аккаунта? Регистрация";$("authMessage").textContent="";}
+function submitAuth(){const username=$("username").value.trim(),password=$("password").value,msg=$("authMessage");if(!/^[a-zA-Zа-яА-ЯёЁ0-9_ -]{3,18}$/.test(username)){msg.textContent="Имя: от 3 до 18 букв, цифр или знаков _ -";return;}if(password.length<4){msg.textContent="Пароль должен содержать минимум 4 символа.";return;}const a=getAccounts(),key=username.toLowerCase();if(authMode==="register"){if(a[key]){msg.textContent="Такой аккаунт уже существует. Войди в него.";return;}a[key]={username,password,xp:0,coins:0,ownedSkins:["default"],equippedSkin:"default",goldBonusClaimed:false};saveAccounts(a);}else if(!a[key]||a[key].password!==password){msg.textContent="Неверное имя аккаунта или пароль.";return;}loginUser(key);}
+function logout(){saveProgress();clearInterval(timer);running=false;currentUser=null;localStorage.removeItem(SESSION_KEY);document.body.classList.remove("playing");$("username").value="";$("password").value="";authMode="login";$("authTitle").textContent="Вход";$("authButton").textContent="ВОЙТИ";$("switchAuth").textContent="Нет аккаунта? Регистрация";$("authMessage").textContent="Введи данные аккаунта или зарегистрируй новый.";showOnly("authScreen");}
+
+const canvas=$("canvas"),ctx=canvas.getContext("2d"),SIZE=28,CELLS=20,BOARD_SIZE=560;
+let snake=[],previousSnake=[],apples=[],obstacles=[],enemies=[],direction="RIGHT",nextDirection="RIGHT";
+let score=0,wave=1,running=false,timer=null,claimedRewards=[],startingRank="Бронза",rainbowHue=0,startX=0,startY=0,lastStepTime=0,currentSpeed=180;
+const waveTargets=[20,30,40,70],waveObstacles=[8,10,12,14],waveSpeeds=[180,165,150,135];
+const skins=[{id:"default",name:"Обычная",price:0,emoji:"🐍",description:"Зелёная змейка"},{id:"apple",name:"Яблочная",price:20,emoji:"🍎",description:"Красная змейка"},{id:"orange",name:"Апельсиновая",price:40,emoji:"🍊",description:"Оранжевая змейка"},{id:"cosmic",name:"Космическая",price:100,emoji:"🌌",description:"Космическая змейка"},{id:"rainbow",name:"Радужная",price:1000,emoji:"🌈",description:"Радужная змейка"}];
+function renderShop(){$("skinList").innerHTML="";skins.forEach(s=>{const card=document.createElement("div");card.className="skin-card";const preview=document.createElement("div");preview.className="skin-preview";preview.textContent=s.emoji;const name=document.createElement("div");name.className="skin-name";name.textContent=s.name;const desc=document.createElement("div");desc.className="skin-status";desc.textContent=s.description;const price=document.createElement("div");price.className="skin-price";price.textContent=s.price?s.price+" монет":"Бесплатно";const btn=document.createElement("button"),owned=ownedSkins.includes(s.id);if(equippedSkin===s.id){btn.textContent="✓ Выбран";btn.disabled=true;}else if(owned){btn.textContent="Выбрать";btn.onclick=()=>equipSkin(s.id);}else{btn.textContent="Купить";btn.disabled=coins<s.price;btn.onclick=()=>buySkin(s.id);}card.append(preview,name,desc,price,btn);$("skinList").appendChild(card);});}
+function buySkin(id){const s=skins.find(x=>x.id===id);if(!s||ownedSkins.includes(id)||coins<s.price)return;coins-=s.price;ownedSkins.push(id);equippedSkin=id;$("shopMessage").textContent="🎉 Скин куплен!";updateStats();renderShop();}
+function equipSkin(id){if(!ownedSkins.includes(id))return;equippedSkin=id;saveProgress();renderShop();$("shopMessage").textContent="Скин выбран!";}
+function randomPosition(){return{x:Math.floor(Math.random()*CELLS),y:Math.floor(Math.random()*CELLS)};}
+function occupied(p){return snake.some(s=>s.x===p.x&&s.y===p.y)||obstacles.some(o=>o.x===p.x&&o.y===p.y)||apples.some(a=>a.x===p.x&&a.y===p.y);}
+function createApple(){if(apples.length>=3)return;let p,n=0;do{p=randomPosition();n++;}while(occupied(p)&&n<500);if(!occupied(p))apples.push(p);}
+function createObstacles(count){obstacles=[];for(let i=0;i<count;i++){let p,n=0;do{p=randomPosition();n++;}while(occupied(p)&&n<500);if(!occupied(p))obstacles.push(p);}}
+function createEnemies(count){enemies=[];for(let i=0;i<count;i++){let p,n=0;do{p=randomPosition();n++;}while((occupied(p)||enemies.some(e=>e.x===p.x&&e.y===p.y))&&n<500);if(!occupied(p))enemies.push(p);}}
+function updateWaveInfo(){$("wave").textContent=["🌊 ВОЛНА 1","🌊 ВОЛНА 2","🌊 ВОЛНА 3","🔥 ВОЛНА 4"][wave-1];$("waveGoal").textContent=wave<4?"До следующей волны: "+(waveTargets[wave-1]-score)+" яблок":"🔥 Финальная волна! До победы: "+(70-score)+" яблок";}
+function nextWave(){if(wave>=4)return;wave++;createObstacles(waveObstacles[wave-1]);if(wave===4)createEnemies(4);currentSpeed=waveSpeeds[wave-1];clearInterval(timer);timer=setInterval(gameLoop,currentSpeed);updateWaveInfo();$("message").textContent=wave===4?"🔥 Финальная волна! Побеждай врагов!":"🎉 НОВАЯ ВОЛНА!";}
+function setupGame(){score=0;wave=1;claimedRewards=[];startingRank=xp>=100?"Золото":"Бронза";snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];previousSnake=snake.map(s=>({...s}));apples=[];obstacles=[];enemies=[];direction=nextDirection="RIGHT";currentSpeed=waveSpeeds[0];lastStepTime=performance.now();createObstacles(waveObstacles[0]);for(let i=0;i<3;i++)createApple();$("score").textContent="0/70";updateWaveInfo();updateStats();draw(1);}
+function startGame(){if(!currentUser)return;clearInterval(timer);document.body.classList.add("playing");showOnly("gameScreen");setupGame();running=true;lastStepTime=performance.now();$("message").textContent="Удачи! 🍎";timer=setInterval(gameLoop,currentSpeed);}
+function goMenu(){clearInterval(timer);running=false;document.body.classList.remove("playing");showOnly("menuScreen");updateStats();}
+function changeDirection(d){if(!running)return;const opposite={UP:"DOWN",DOWN:"UP",LEFT:"RIGHT",RIGHT:"LEFT"};if(d!==opposite[direction])nextDirection=d;}
+function checkXPRewards(){[{a:10,x:5},{a:30,x:15},{a:50,x:30}].forEach(r=>{if(score>=r.a&&!claimedRewards.includes(r.a)){xp=Math.min(100,xp+r.x);claimedRewards.push(r.a);$("message").textContent="⭐ Получено +"+r.x+" XP!";}});updateStats();}
+function drawApple(a){const x=a.x*SIZE,y=a.y*SIZE;ctx.fillStyle="#e72d43";ctx.beginPath();ctx.arc(x+14,y+16,11,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ff6575";ctx.beginPath();ctx.arc(x+9,y+10,4,0,Math.PI*2);ctx.fill();ctx.fillStyle="#61d66e";ctx.beginPath();ctx.ellipse(x+19,y+3,5,2.5,-.5,0,Math.PI*2);ctx.fill();}
+function drawSnake(progress=1){const lerp=(a,b,t)=>a+(b-a)*t;snake.forEach((s,i)=>{const old=previousSnake[i]||previousSnake[previousSnake.length-1]||s,x=lerp(old.x,s.x,progress)*SIZE,y=lerp(old.y,s.y,progress)*SIZE;let color="#38bd68",headColor="#a5ff73";if(equippedSkin==="apple"){color="#df354d";headColor="#ff7184";}if(equippedSkin==="orange"){color="#ed861f";headColor="#ffc05c";}if(equippedSkin==="cosmic"){color="#4934a5";headColor="#9b7aff";}if(equippedSkin==="rainbow"){color=`hsl(${(rainbowHue+i*18)%360},85%,52%)`;headColor=`hsl(${(rainbowHue+30)%360},95%,70%)`;}ctx.fillStyle=i===0?headColor:color;ctx.beginPath();ctx.roundRect(x+2,y+2,24,24,8);ctx.fill();if(i===0){ctx.fillStyle="#10251b";const eyes=direction==="RIGHT"?[[20,9],[20,18]]:direction==="LEFT"?[[8,9],[8,18]]:direction==="UP"?[[9,8],[18,8]]:[[9,20],[18,20]];eyes.forEach(e=>{ctx.beginPath();ctx.arc(x+e[0],y+e[1],2,0,Math.PI*2);ctx.fill();});}});}
+function draw(progress=1){ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle="#152330";ctx.fillRect(0,0,canvas.width,canvas.height);const scale=Math.min(canvas.width/BOARD_SIZE,canvas.height/BOARD_SIZE),ox=(canvas.width-BOARD_SIZE*scale)/2,oy=(canvas.height-BOARD_SIZE*scale)/2;ctx.setTransform(scale,0,0,scale,ox,oy);for(let y=0;y<CELLS;y++)for(let x=0;x<CELLS;x++){ctx.fillStyle=(x+y)%2===0?"#152330":"#172735";ctx.fillRect(x*SIZE,y*SIZE,SIZE,SIZE);}obstacles.forEach(o=>{ctx.fillStyle="#727d91";ctx.beginPath();ctx.roundRect(o.x*SIZE+3,o.y*SIZE+3,22,22,6);ctx.fill();});apples.forEach(drawApple);enemies.forEach(e=>{ctx.fillStyle="#b91f45";ctx.beginPath();ctx.arc(e.x*SIZE+14,e.y*SIZE+14,11,0,Math.PI*2);ctx.fill();ctx.fillStyle="white";ctx.fillRect(e.x*SIZE+9,e.y*SIZE+12,3,3);ctx.fillRect(e.x*SIZE+17,e.y*SIZE+12,3,3);});drawSnake(progress);}
+function gameLoop(){if(!running)return;previousSnake=snake.map(s=>({...s}));direction=nextDirection;const head={...snake[0]};if(direction==="UP")head.y--;if(direction==="DOWN")head.y++;if(direction==="LEFT")head.x--;if(direction==="RIGHT")head.x++;const eating=apples.some(a=>a.x===head.x&&a.y===head.y);if(head.x<0||head.x>=CELLS||head.y<0||head.y>=CELLS){endGame("Ты врезался в стену!");return;}if(obstacles.some(o=>o.x===head.x&&o.y===head.y)){endGame("Ты врезался в препятствие!");return;}const ei=enemies.findIndex(e=>e.x===head.x&&e.y===head.y);if(ei!==-1){enemies.splice(ei,1);$("message").textContent="💥 Враг побеждён!";}const body=eating?snake:snake.slice(0,-1);if(body.some(s=>s.x===head.x&&s.y===head.y)){endGame("Ты столкнулся с собой!");return;}snake.unshift(head);if(eating){apples=apples.filter(a=>!(a.x===head.x&&a.y===head.y));score++;$("score").textContent=score+"/70";if([10,30,50].includes(score))checkXPRewards();if(score>=70){endGame("🏆 Ты собрал 70 яблок!");return;}if((wave===1&&score>=20)||(wave===2&&score>=30)||(wave===3&&score>=40))nextWave();createApple();}else snake.pop();updateWaveInfo();lastStepTime=performance.now();draw(1);}
+function endGame(message){if(!running)return;running=false;clearInterval(timer);if(score>=70)xp=Math.min(100,xp+60);const earned=score>=70?100:score>=50?60:score>=30?20:score>=10?2:0;let bonus=0;if(startingRank==="Бронза"&&xp>=100&&!goldBonusClaimed){bonus=40;goldBonusClaimed=true;}coins+=earned+bonus;updateStats();document.body.classList.remove("playing");showOnly("gameOver");$("endTitle").textContent=score>=70?"🏆 ПОБЕДА!":"💀 ИГРА ОКОНЧЕНА";$("endText").textContent=message+" Яблок собрано: "+score;$("endReward").textContent="🪙 Награда: +"+earned+" монет"+(bonus?" | Новый ранг: +40 монет":"");$("endCoins").textContent="💰 Баланс: "+coins+" монет";saveProgress();}
+function animate(now){if(running)draw(Math.min(1,(now-lastStepTime)/currentSpeed));requestAnimationFrame(animate);}
+requestAnimationFrame(animate);
+canvas.addEventListener("touchstart",e=>{const t=e.changedTouches[0];startX=t.clientX;startY=t.clientY;},{passive:true});
+canvas.addEventListener("touchend",e=>{if(!running)return;const t=e.changedTouches[0],dx=t.clientX-startX,dy=t.clientY-startY;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;if(Math.abs(dx)>Math.abs(dy))changeDirection(dx>0?"RIGHT":"LEFT");else changeDirection(dy>0?"DOWN":"UP");},{passive:true});
+document.addEventListener("keydown",e=>{const keys={ArrowUp:"UP",ArrowDown:"DOWN",ArrowLeft:"LEFT",ArrowRight:"RIGHT",w:"UP",s:"DOWN",a:"LEFT",d:"RIGHT"};if(keys[e.key]){e.preventDefault();changeDirection(keys[e.key]);}});
+$("authButton").onclick=submitAuth;$("switchAuth").onclick=switchAuthMode;$("startButton").onclick=startGame;$("shopButton").onclick=()=>{showOnly("shopScreen");updateStats();renderShop();};$("musicButton").onclick=toggleMusic;$("logoutButton").onclick=logout;$("closeShop").onclick=goMenu;$("quitGame").onclick=goMenu;$("toMenu").onclick=goMenu;$("restart").onclick=startGame;
+setInterval(()=>{if(equippedSkin==="rainbow"&&running)rainbowHue=(rainbowHue+2)%360;},100);
+const saved=localStorage.getItem(SESSION_KEY),accounts=getAccounts();if(saved&&accounts[saved])loginUser(saved);else{localStorage.removeItem(SESSION_KEY);showOnly("authScreen");}updateMusicButton();if(musicEnabled)startMusic();
+window.addEventListener("beforeunload",saveProgress);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveProgress();else if(musicEnabled){startMusic();if(audioContext&&audioContext.state!=="running")audioContext.resume().catch(()=>{});}});
+})();
