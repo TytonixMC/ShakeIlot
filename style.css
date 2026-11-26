@@ -1,0 +1,74 @@
+*{box-sizing:border-box}
+body{
+ margin:0;padding:12px;
+ background:radial-gradient(circle at top,#193b35,#071311 75%);
+ color:#effff5;font-family:Arial,sans-serif;text-align:center;
+ min-height:100vh;
+}
+h1{color:#65ff9a;text-shadow:0 0 15px #35ff85;margin:8px 0}
+h2{color:#8cffb0}
+button,input{font-size:16px;border-radius:12px;padding:12px}
+button{
+ border:1px solid #55ff99;background:#123d2b;color:white;
+ margin:6px;cursor:pointer;font-weight:bold
+}
+button:active{transform:scale(.97)}
+input{
+ display:block;margin:12px auto;width:min(90%,320px);
+ background:#10251d;border:1px solid #4d9d70;color:white;
+ padding:15px;
+}
+.panel{
+ width:min(95%,520px);margin:14px auto;padding:18px;
+ background:#10251eea;border:1px solid #286a48;border-radius:18px;
+ box-shadow:0 0 20px #0008
+}
+.hidden{display:none!important}
+.small{color:#a6cbb4;font-size:13px}
+.stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.stat{background:#183c2b;padding:9px 13px;border-radius:10px}
+#loginScreen{
+ width:100%;max-width:none;min-height:calc(100dvh - 24px);margin:0;
+ display:flex;flex-direction:column;justify-content:center;align-items:center;
+ border:0;background:transparent;box-shadow:none;
+}
+#loginScreen h1{font-size:34px}
+#loginScreen h2{font-size:25px}
+#loginScreen input{max-width:350px;width:90%}
+#loginScreen button{
+ display:block;width:min(90%,350px);min-height:55px;font-size:18px;margin:9px auto;
+}
+#authMessage{min-height:20px}
+#menuScreen button{
+ display:block;width:min(94%,380px);min-height:62px;margin:13px auto;
+ font-size:19px;padding:16px;border-radius:15px;
+}
+#menuScreen p{margin:8px 0}
+#gameScreen{
+ width:100%;max-width:none;margin:0 auto;padding:5px 0 12px;
+ border:0;background:transparent;box-shadow:none;
+}
+.canvasWrap{
+ position:relative;width:100%;height:calc(100dvh - 205px);min-height:360px;
+ max-height:900px;margin:0 auto;
+}
+#gameCanvas{
+ display:block;width:100%;height:100%;border:2px solid #62ff9c;
+ border-radius:10px;background:#08150f;touch-action:none;
+}
+#shakeTitle{
+ position:absolute;top:7px;left:0;right:0;color:#a0ffbd;
+ font-size:clamp(16px,4vw,25px);font-weight:bold;
+ text-shadow:0 0 10px #00ff80;pointer-events:none;z-index:2;
+}
+#gameStats{
+ margin:9px auto 4px;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;
+}
+#gameStats .stat{min-width:95px;font-size:15px}
+.skin{display:inline-block;background:#193b2b;border-radius:12px;padding:10px;margin:5px}
+footer{margin:20px;color:#729783;font-size:12px}
+@media(max-width:500px){
+ body{padding:7px}
+ .canvasWrap{height:calc(100dvh - 190px);min-height:330px}
+ #gameStats .stat{padding:8px 9px;min-width:85px;font-size:13px}
+}
