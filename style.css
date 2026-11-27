@@ -1,41 +1,39 @@
 *{box-sizing:border-box}
-body{margin:0;padding:12px;background:radial-gradient(circle at top,#193b35,#071311 75%);color:#effff5;font-family:Arial,sans-serif;text-align:center;min-height:100vh}
-h1{color:#65ff9a;text-shadow:0 0 15px #35ff85;margin:8px 0}
-h2{color:#8cffb0}
+body{margin:0;padding:10px;min-height:100vh;background:radial-gradient(circle at top,#6f1025,#090509 70%);color:#fff0ed;font-family:Arial,sans-serif;text-align:center;overflow-x:hidden}
+h1,h2{color:#fff0e8;text-shadow:0 0 12px #ff344d,0 0 28px #a60027}
 button,input{font-size:16px;border-radius:12px;padding:12px}
-button{border:1px solid #55ff99;background:#123d2b;color:white;margin:6px;cursor:pointer;font-weight:bold}
-button:active{transform:scale(.97)}
-input{display:block;margin:12px auto;width:min(90%,320px);background:#10251d;border:1px solid #4d9d70;color:white;padding:15px}
-.panel{width:min(95%,520px);margin:14px auto;padding:18px;background:#10251eea;border:1px solid #286a48;border-radius:18px;box-shadow:0 0 20px #0008}
-.hidden{display:none!important}
-.small{color:#a6cbb4;font-size:13px}
-.stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
-.stat{background:#183c2b;padding:9px 13px;border-radius:10px}
-#loadingScreen{width:min(95%,520px);min-height:390px;margin:12vh auto 0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(145deg,#102b22f2,#071710f5);border:1px solid #55ff99;box-shadow:0 0 35px #24ff8b33,inset 0 0 30px #24ff8b0c}
-.loader-logo{font-size:76px;filter:drop-shadow(0 0 18px #42ff9b);animation:snakeBob .8s ease-in-out infinite alternate}
-.loader-title{font-size:clamp(30px,8vw,48px);letter-spacing:4px;margin:8px 0;text-shadow:0 0 18px #35ff85}
-.loader-subtitle{color:#b5ffd0;letter-spacing:5px;font-weight:bold}
-.loader-track{width:82%;height:17px;border-radius:20px;background:#06110c;border:1px solid #39895d;overflow:hidden;margin:22px auto 8px;box-shadow:inset 0 2px 6px #000}
-.loader-fill{height:100%;width:0%;border-radius:20px;background:linear-gradient(90deg,#00c978,#75ff9d,#eaff9b);box-shadow:0 0 16px #47ff91;animation:loadFive 5s linear forwards}
-.loader-percent{font-weight:bold;color:#8cffb0;font-size:20px;font-variant-numeric:tabular-nums}
-.loader-dots{display:flex;gap:9px;margin:8px}
-.loader-dots span{width:8px;height:8px;background:#76ff9e;border-radius:50%;animation:dotPulse .7s ease-in-out infinite alternate}
-.loader-dots span:nth-child(2){animation-delay:.2s}.loader-dots span:nth-child(3){animation-delay:.4s}
-@keyframes loadFive{from{width:0}to{width:100%}}
-@keyframes snakeBob{from{transform:translateY(0) rotate(-5deg)}to{transform:translateY(-9px) rotate(5deg)}}
-@keyframes dotPulse{from{opacity:.25;transform:scale(.7)}to{opacity:1;transform:scale(1.25)}}
-#loginScreen{width:100%;max-width:none;min-height:calc(100dvh - 24px);margin:0;display:flex;flex-direction:column;justify-content:center;align-items:center;border:0;background:transparent;box-shadow:none}
-#loginScreen h1{font-size:34px}#loginScreen h2{font-size:25px}#loginScreen input{max-width:350px;width:90%}
-#loginScreen button{display:block;width:min(90%,350px);min-height:55px;font-size:18px;margin:9px auto}
-#authMessage{min-height:20px}
-#menuScreen button{display:block;width:min(94%,380px);min-height:62px;margin:13px auto;font-size:19px;padding:16px;border-radius:15px}
-#menuScreen p{margin:8px 0}
-#gameScreen{width:100%;max-width:none;margin:0 auto;padding:5px 0 12px;border:0;background:transparent;box-shadow:none}
-.canvasWrap{position:relative;width:100%;height:calc(100dvh - 205px);min-height:360px;max-height:900px;margin:0 auto}
-#gameCanvas{display:block;width:100%;height:100%;border:2px solid #62ff9c;border-radius:10px;background:#08150f;touch-action:none}
-#shakeTitle{position:absolute;top:7px;left:0;right:0;color:#a0ffbd;font-size:clamp(16px,4vw,25px);font-weight:bold;text-shadow:0 0 10px #00ff80;pointer-events:none;z-index:2}
-#gameStats{margin:9px auto 4px;display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
-#gameStats .stat{min-width:95px;font-size:15px}
-.skin{display:inline-block;background:#193b2b;border-radius:12px;padding:10px;margin:5px;min-width:115px}
-footer{margin:20px;color:#729783;font-size:12px}
-@media(max-width:500px){body{padding:7px}.canvasWrap{height:calc(100dvh - 190px);min-height:330px}#gameStats .stat{padding:8px 9px;min-width:85px;font-size:13px}}
+button{border:1px solid #ffb1a3;background:linear-gradient(110deg,#5b071d,#b51032,#ed3d42);color:white;margin:6px;cursor:pointer;font-weight:bold;box-shadow:0 0 12px #ff263b77}
+button:disabled{opacity:.5;cursor:not-allowed}
+input{display:block;margin:12px auto;width:min(90%,320px);background:#210b14;border:1px solid #d94b63;color:white;padding:15px}
+.panel{width:min(95%,520px);margin:14px auto;padding:18px;background:linear-gradient(145deg,#2a0517f5,#11050df5 58%,#4b0919f2);border:1px solid #ff6477;border-radius:18px;box-shadow:0 0 22px #ff183b55}
+
+.hidden{display:none!important}.small{color:#ffd4cd;font-size:13px}
+.tagCard{display:inline-flex;vertical-align:top;flex-direction:column;gap:7px;align-items:center;background:#351020;border:1px solid #9c3450;border-radius:13px;padding:12px;margin:6px;min-width:145px;max-width:190px}
+.tagBadge{display:inline-block;padding:5px 12px;border-radius:20px;font-weight:bold;background:#5d5d5d;color:white}
+#resultOverlay{position:fixed;inset:0;z-index:9999;background:#000b;display:flex;align-items:center;justify-content:center;padding:18px}
+#resultBox{position:relative;width:min(92vw,390px);padding:26px 18px 22px;background:linear-gradient(145deg,#321027,#130713);border:2px solid #ff7b9b;border-radius:20px;box-shadow:0 0 30px #ff287777}
+#resultBox h2{margin:8px 25px 14px}#resultClose{position:absolute;right:9px;top:7px;width:36px;height:36px;margin:0;padding:0;border-radius:50%;font-size:22px}
+#adminWithdraw{margin:10px auto;padding:12px;border:1px solid #ffd45a;border-radius:12px;background:#30220b}
+.stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.stat{background:#650b28;padding:9px 13px;border-radius:10px;border:1px solid #ff9a9a88}
+#loadingScreen{min-height:350px;margin-top:12vh}#loginScreen,#menuScreen{min-height:300px}
+#loginScreen button,#menuScreen button{display:block;width:min(94%,380px);min-height:52px;margin:10px auto;font-size:17px}
+#gameScreen{width:100%;margin:auto;padding:5px 0 12px}
+.canvasWrap{position:relative;width:100%;height:calc(100dvh - 205px);min-height:310px;max-height:900px;margin:auto}
+#gameCanvas{display:block;width:100%;height:100%;border:2px solid #62ffdc;border-radius:10px;background:#08150f;touch-action:none}
+#shakeTitle{position:absolute;top:7px;left:0;right:0;color:#a0faff;font-size:clamp(16px,4vw,25px);font-weight:bold;text-shadow:0 0 10px #00dfff;pointer-events:none}
+#gameStats{margin:9px auto;display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+#gameStats .stat{min-width:85px;font-size:14px}
+.skin{display:inline-flex;vertical-align:top;flex-direction:column;align-items:center;justify-content:center;background:#351020;border-radius:12px;padding:10px;margin:5px;min-width:125px;max-width:160px;min-height:155px;border:1px solid #9c3450}
+.skinPreview{width:38px;height:38px;border-radius:50%;margin:4px auto;box-shadow:0 0 10px #fff5}
+.skin .small{min-height:34px;margin:6px 0}.skin button{font-size:13px;padding:9px}
+.skin.kitsune{border:1px solid #55dfff;box-shadow:0 0 18px #00bfff99;background:linear-gradient(145deg,#102b53,#17204b)}
+#caseOdds{max-width:460px;margin:12px auto;text-align:left;background:#210b14;padding:12px;border-radius:12px}
+.oddsRow{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid #623044}
+footer{margin:20px;color:#c08091;font-size:12px}
+.loader-logo{font-size:76px;animation:bob .8s ease-in-out infinite alternate}
+.loader-track{width:82%;height:17px;border-radius:20px;background:#210710;border:1px solid #ff6878;overflow:hidden;margin:22px auto 8px}
+.loader-fill{height:100%;width:0;background:linear-gradient(90deg,#7d0827,#ff344b,#ffb06a);animation:loadFive 1.2s linear forwards}
+@keyframes loadFive{to{width:100%}}@keyframes bob{to{transform:translateY(-9px) rotate(5deg)}}
+.kitsuneBadge{color:#72eaff;text-shadow:0 0 8px #00bfff}
+@media(max-width:500px){body{padding:7px}.canvasWrap{height:calc(100dvh - 190px);min-height:290px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
