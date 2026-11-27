@@ -126,7 +126,7 @@ function logout(){
  username.value="";password.value="";authMessage.textContent="";showOnly("loginScreen");
 }
 function showOnly(id){
- ["loadingScreen","loginScreen","menuScreen","shopScreen","promoScreen","gameScreen","gameOverScreen","caseInfoScreen"].forEach(x=>document.getElementById(x).classList.add("hidden"));
+ ["loadingScreen","loginScreen","menuScreen","shopScreen","promoScreen","tagsScreen","gameScreen","gameOverScreen","caseInfoScreen"].forEach(x=>document.getElementById(x).classList.add("hidden"));
  document.getElementById(id).classList.remove("hidden");
  const playing=id==="gameScreen";
  mainHeader.classList.toggle("hidden",playing||id==="loginScreen");
@@ -159,6 +159,7 @@ function renderSkins(){
 }
 function buyOrEquip(id){
  const skin=getSkins()[id];if(!skin)return;
+ const owned=currentUser.ownedSkins.includes(id);
  if(skin.caseOnly&&!currentUser.ownedSkins.includes(id)){alert("Эту змейку можно получить только из сундука!");return;}
  if(currentUser.ownedSkins.includes(id))currentUser.equippedSkin=id;
  else{
